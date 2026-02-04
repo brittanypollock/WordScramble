@@ -12,6 +12,8 @@ struct ContentView: View {
     @State private var rootWord = ""
     @State private var newWord = ""
     
+    @State private var score = 0
+    
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     @State private var showingError = false
@@ -20,6 +22,9 @@ struct ContentView: View {
         NavigationStack {
             List {
                 Section {
+                    Text("Score: \(score)")
+                        .font(.headline)
+                    
                     TextField("Enter your word", text: $newWord)
                         .textInputAutocapitalization(.never)
                 }
@@ -71,6 +76,7 @@ struct ContentView: View {
         
         withAnimation {
             usedWords.insert(answer, at: 0)
+            score += newWord.count - 3
         }
         
         newWord = ""
@@ -89,7 +95,7 @@ struct ContentView: View {
     }
     
     func isOriginal(word: String) -> Bool {
-        !usedWords.contains(word) && !newWord.contains(word)
+        !usedWords.contains(word) && word != rootWord
     }
     
     func isPossible(word: String) -> Bool {
