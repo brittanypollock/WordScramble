@@ -21,10 +21,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    Text("Score: \(score)")
-                        .font(.headline)
-                    
+                Section("Score: \(score)") {
                     TextField("Enter your word", text: $newWord)
                         .textInputAutocapitalization(.never)
                 }
@@ -76,13 +73,17 @@ struct ContentView: View {
         
         withAnimation {
             usedWords.insert(answer, at: 0)
-            score += newWord.count - 3
+            score += answer.count - 3 + usedWords.count - 1
         }
         
         newWord = ""
     }
     
     func startGame() {
+        usedWords.removeAll()
+        newWord = ""
+        score = 0
+        
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
             if let startWords = try? String(contentsOf: startWordsURL, encoding: .ascii) {
                 let allWords = startWords.components(separatedBy: "\n")
